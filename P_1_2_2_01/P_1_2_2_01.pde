@@ -1,27 +1,5 @@
 // P_1_2_2_01.pde
-// 
-// Generative Gestaltung, ISBN: 978-3-87439-759-9
-// First Edition, Hermann Schmidt, Mainz, 2009
-// Hartmut Bohnacker, Benedikt Gross, Julia Laub, Claudius Lazzeroni
-// Copyright 2009 Hartmut Bohnacker, Benedikt Gross, Julia Laub, Claudius Lazzeroni
-//
-// http://www.generative-gestaltung.de
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-/**
- * extract and sort the color palette of an image
- * 	 
- * MOUSE
- * position x          : resolution
- * 
+/*
  * KEYS
  * 1-3                 : load different images
  * 4                   : no color sorting
@@ -41,18 +19,32 @@ import java.util.Calendar;
 boolean savePDF = false;
 
 PImage img;
+
+int currentIndex = 0;
+ArrayList<PImage> pictureList;
 color[] colors;
 
-String sortMode = null;
-
-
+String sortMode = GenerativeDesign.HUE;
 
 void setup(){
-  size(600, 600);
+  size(600, 700);
   colorMode(HSB, 360, 100, 100, 100);
   noStroke();
   noCursor();
-  img = loadImage("pic1.jpg"); 
+  pictureList = new ArrayList<PImage>();
+
+  pictureList.add(loadImage("Bild1.jpg"));
+  pictureList.add(loadImage("Bild2.jpg"));
+  pictureList.add(loadImage("Bild3.jpg"));
+  pictureList.add(loadImage("Bild4.jpg"));
+  pictureList.add(loadImage("Bild5.jpg"));
+  pictureList.add(loadImage("Bild6.jpg"));
+  pictureList.add(loadImage("Bild7.jpg"));
+  pictureList.add(loadImage("Bild8.jpg"));
+  pictureList.add(loadImage("Bild9.jpg"));
+  pictureList.add(loadImage("Bild10.jpg"));
+  
+  //img = loadImage("pic1.jpg"); 
 }
 
 
@@ -62,7 +54,10 @@ void draw(){
     colorMode(HSB, 360, 100, 100, 100);
     noStroke();
   }
+  img = pictureList.get(currentIndex);
+  size(img.width, img.height);
 
+  //int tileCount = width;
   int tileCount = width / max(mouseX, 5);
   float rectSize = width / float(tileCount);
 
@@ -80,7 +75,6 @@ void draw(){
 
   // sort colors
   if (sortMode != null) colors = GenerativeDesign.sortColors(this, colors, sortMode);
-  
 
   // draw grid
   i = 0;
@@ -98,20 +92,16 @@ void draw(){
   }
 }
 
-
 void keyReleased(){
   if (key=='c' || key=='C') GenerativeDesign.saveASE(this, colors, timestamp()+".ase");
   if (key=='s' || key=='S') saveFrame(timestamp()+"_##.png");
   if (key=='p' || key=='P') savePDF = true;
-
-  if (key == '1') img = loadImage("pic1.jpg");
-  if (key == '2') img = loadImage("pic2.jpg"); 
-  if (key == '3') img = loadImage("pic3.jpg"); 
-
-  if (key == '4') sortMode = null;
+  if (key=='r' || key=='R') currentIndex = (int) random(0, pictureList.size()-1);
+ 
   if (key == '5') sortMode = GenerativeDesign.HUE;
   if (key == '6') sortMode = GenerativeDesign.SATURATION;
   if (key == '7') sortMode = GenerativeDesign.BRIGHTNESS;
+  //if (key == '8') sortMode = null;
   if (key == '8') sortMode = GenerativeDesign.GRAYSCALE;
 }
 
